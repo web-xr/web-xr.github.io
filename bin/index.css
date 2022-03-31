@@ -1,0 +1,20 @@
+* {
+    user-select: none;
+    outline: none;
+    touch-action: none;
+    font-family: Rubik;
+}
+
+*::-webkit-scrollbar { width: 5px; height: 5px; }
+*::-webkit-scrollbar-track { background-color: #333333; }
+*::-webkit-scrollbar-thumb { background-color: #FFF5; }
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0px;
+    background-color: #ffffff;
+    overflow-x: hidden;
+}

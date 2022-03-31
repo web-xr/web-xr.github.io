@@ -1,0 +1,133 @@
+.cover {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.cover-title-container {
+    width: 55vw;
+    box-shadow: 0px 0px 30px #1112;
+}
+
+.cover-title {
+    font-weight: 500;
+    color: #111;
+}
+
+.cover-canvas {
+    width: 45vw;
+    background-color: #223131;
+}
+
+.cover-button {
+    cursor: pointer;
+    transition-property: background, color;
+    transition-duration: 0.3s;
+    font-weight: 400;
+    border-radius: 100px;
+}
+
+.cover-button::after {
+    content: '›';
+    display: inline;
+    float: right;
+    margin-right: 10px;
+    color: transparent;
+    transition-property: margin-right, color;
+    transition-duration: 0.3s;
+}
+
+.cover-button:hover {
+    background-color: #2222;
+}
+
+.cover-button:hover::after {
+    color: #222;
+    margin-right: 0px;
+}
+
+body[index="0"] .cover-button:nth-child(1) {
+    background-color: #222;
+    color: #FFF;
+}
+
+body[index="0"] .cover-button:nth-child(1)::after {
+    color: #FFF;
+    margin-right: 0px;
+}
+
+body[index="1"] .cover-button:nth-child(2) {
+    background-color: #222;
+    color: #FFF;
+}
+
+body[index="1"] .cover-button:nth-child(2)::after {
+    color: #FFF;
+    margin-right: 0px;
+}
+
+body[index="2"] .cover-button:nth-child(3) {
+    background-color: #222;
+    color: #FFF;
+}
+
+body[index="2"] .cover-button:nth-child(3)::after {
+    color: #FFF;
+    margin-right: 0px;
+}
+
+body[index="3"] .cover-button:nth-child(4) {
+    background-color: #222;
+    color: #FFF;
+}
+
+body[index="3"] .cover-button:nth-child(4)::after {
+    color: #FFF;
+    margin-right: 0px;
+}
+
+@media (min-width: 1200px) and (max-width: 1800px) {
+    .cover-title {
+        font-size: 48px;
+        padding: 70px 0px 30px 60px;
+    }
+    .cover-button-container {
+        padding: 20px 120px 70px 100px;
+    }
+    .cover-button {
+        margin: 20px 0px;
+        font-size: 18px;
+        padding: 15px 25px;
+        width: 270px;
+    }
+}
+
+@media (min-width: 890px) and (max-width: 1200px) {
+    .cover-title {
+        font-size: 40px;
+        padding: 60px 30px 30px 60px;
+    }
+    .cover-button-container {
+        padding: 20px 80px 50px 80px;
+    }
+    .cover-button {
+        margin: 15px 0px;
+        font-size: 15px;
+        padding: 12px 20px;
+        width: 240px;
+    }
+}
+
+@media (min-width: 0px) and (max-width: 890px) {
+    .cover {
+        display: block;
+    }
+    .cover-title-container {
+        width: 100vw;
+        height: auto;
+    }
+    .cover-title {
+        font-size: 30px;
+        padding: 60px;
+        text-align: center;
+    }
+}

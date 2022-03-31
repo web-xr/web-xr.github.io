@@ -1,0 +1,140 @@
+.example {
+    overflow: hidden;
+    background-color: #252525;
+}
+
+.example-container {
+    transition-property: margin;
+    transition-duration: 1s;
+    width: 100vw;
+    font-size: 0px;
+}
+
+.example-list {
+    color: #FFF;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.example-item {
+    width: 100%;
+    cursor: pointer;
+    transition: background 0.2s;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.example-item:hover {
+    background-color: #FFF1;
+}
+
+.example-item-title {
+    font-weight: 500;
+}
+
+.example-item-button {
+    text-align: center;
+}
+
+.example-item:hover > .example-item-button::after {
+    content: 'Click to open this example' !important;
+}
+
+.example-item[link="car-configurator"] .example-item-button::after {
+    content: 'Design your dream ride';
+}
+
+.example-item[link="clothing-customizer"] .example-item-button::after {
+    content: 'Select the color and fesign';
+}
+
+.example-item[link="diyazen"] .example-item-button::after {
+    content: 'Sri Lanka\'s first humanoid robot';
+}
+
+.example-item[link="furniture-collection"] .example-item-button::after {
+    content: 'For your living room';
+}
+
+.example-item[link="kitchen-mate"] .example-item-button::after {
+    content: 'AR experience in your kitchen';
+}
+
+.example-item[link="room-3d"] .example-item-button::after {
+    content: 'VR experience in bedroom';
+}
+
+.example-item[link="star-runner"] .example-item-button::after {
+    content: '3D motion and effects';
+}
+
+.example-item[link="virtual-exhibition"] .example-item-button::after {
+    content: 'Virtual visit for showrooms';
+}
+
+.example-item[link="car-configurator"] { background-image: url(./examples/car-configurator.svg); }
+.example-item[link="clothing-customizer"] { background-image: url(./examples/clothing-customizer.svg); }
+.example-item[link="diyazen"] { background-image: url(./examples/diyazen.svg); }
+.example-item[link="furniture-collection"] { background-image: url(./examples/furniture-collection.svg); }
+.example-item[link="kitchen-mate"] { background-image: url(./examples/kitchen-mate.svg); }
+.example-item[link="room-3d"] { background-image: url(./examples/room-3d.svg); }
+.example-item[link="star-runner"] { background-image: url(./examples/star-runner.svg); }
+.example-item[link="virtual-exhibition"] { background-image: url(./examples/virtual-exhibition.svg); }
+
+@media (min-width: 1100px) and (max-width: 1800px) {
+    .example {
+        height: 300px;
+    }
+    .example-list {
+        height: 300px;
+    }
+    .example-item {
+        padding: 40px;
+        background-size: auto calc(100% - 170px);
+    }
+    .example-item-title {
+        font-size: 24px;
+    }
+    .example-item-description {
+        height: 160px;
+    }
+    .example-item-button {
+        font-size: 13px;
+        line-height: 45px;
+    }
+    body[index="0"] .example-container { margin-top: 0px; }
+    body[index="1"] .example-container { margin-top: -300px; }
+    body[index="2"] .example-container { margin-top: -600px; }
+    body[index="3"] .example-container { margin-top: -900px; }
+}
+
+@media (min-width: 890px) and (max-width: 1100px) {
+    .example {
+        height: 260px;
+    }
+    .example-list {
+        height: 260px;
+    }
+    .example-item {
+        padding: 25px 30px;
+        background-size: auto calc(100% - 170px);
+    }
+    .example-item-title {
+        font-size: 20px;
+    }
+    .example-item-description {
+        height: 150px;
+    }
+    .example-item-button {
+        font-size: 12px;
+        line-height: 40px;
+    }
+    body[index="0"] .example-container { margin-top: 0px; }
+    body[index="1"] .example-container { margin-top: -260px; }
+    body[index="2"] .example-container { margin-top: -520px; }
+    body[index="3"] .example-container { margin-top: -780px; }
+}
+
+@media (min-width: 0px) and (max-width: 890px) {
+
+}

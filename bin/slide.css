@@ -1,0 +1,104 @@
+.slide {
+    background-color: #496969;
+    color: #FFFE;
+}
+
+.slide-container {
+    height: 100%;
+    width: 100vw;
+    white-space: nowrap;
+    transition-property: margin;
+    transition-duration: 1s;
+    font-size: 0px;
+}
+
+body[index="0"] .slide-container { margin-left: 0vw; }
+body[index="1"] .slide-container { margin-left: -100vw; }
+body[index="2"] .slide-container { margin-left: -200vw; }
+body[index="3"] .slide-container { margin-left: -300vw; }
+
+.slide-item {
+    height: inherit;
+    display: inline-block;
+    white-space: initial;
+    vertical-align: top;
+    background-repeat: no-repeat;
+}
+
+.slide-item:nth-child(1) {
+    background-image: url(./slide/web_3d_developments.png);
+    background-color: #26734d;
+}
+
+.slide-item:nth-child(2) {
+    background-image: url(./slide/product_configurators.png);
+    background-color: #3b5268;
+}
+
+.slide-item:nth-child(3) {
+    background-image: url(./slide/virtual_reality.png);
+    background-color: #453d49;
+}
+
+.slide-item:nth-child(4) {
+    background-image: url(./slide/augmented_reality.png);
+    background-color: #793138;
+}
+
+.slide-item-title {
+    font-weight: 500;
+}
+
+.slide-item-description {
+    text-align: justify;
+}
+
+@media (min-width: 1100px) and (max-width: 1800px) {
+    .slide {
+        height: 400px;
+    }
+    .slide-item {
+        width: calc(100vw - 380px);
+        padding-left: 380px;
+    }
+    .slide-item {
+        background-position: 70px center;
+        background-size: auto calc(100% - 120px);
+    }
+    .slide-item-title {
+        font-size: 35px;
+        padding: 50px 20px 30px 50px;
+    }
+    .slide-item-description {
+        font-size: 17px;
+        padding: 0px 20px 10px 50px;
+        width: 600px;
+    }
+}
+
+@media (min-width: 890px) and (max-width: 1100px) {
+    .slide {
+        height: 370px;
+    }
+    .slide-item {
+        width: calc(100vw - 270px);
+        padding-left: 270px;
+    }
+    .slide-item {
+        background-position: 60px center;
+        background-size: auto calc(100% - 180px);
+    }
+    .slide-item-title {
+        font-size: 30px;
+        padding: 50px 20px 30px 50px;
+    }
+    .slide-item-description {
+        font-size: 15px;
+        padding: 0px 20px 10px 50px;
+        width: 520px;
+    }
+}
+
+@media (min-width: 0px) and (max-width: 890px) {
+
+}
