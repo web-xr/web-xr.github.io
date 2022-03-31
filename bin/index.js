@@ -16,7 +16,7 @@ let render = () => {
     }
 }
 
-//render()
+render()
 
 window.addEventListener('load', () => {
     qa('.cover-button').forEach((e, i) => {
