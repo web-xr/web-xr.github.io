@@ -1,4 +1,5 @@
 let TrinityEngine = {}
+let __TE__ = {}
 
 TrinityEngine.init = (version, callback) => {
     delete TrinityEngine.init
@@ -34,6 +35,7 @@ TrinityEngine.init = (version, callback) => {
         // webxr
         'engine/source/three/webxr/VRButton.js',
         'engine/source/three/webxr/XRControllerModelFactory.js',
+        'engine/source/three/libs/motion-controllers.module.js',
         // gsap
         'engine/source/gsap/gsap.js',
         // trinity engine
@@ -43,7 +45,8 @@ TrinityEngine.init = (version, callback) => {
         'engine/$VERSION/find.js',
         'engine/$VERSION/load.js',
         'engine/$VERSION/setup.js',
-        'engine/$VERSION/tween.js'
+        'engine/$VERSION/tween.js',
+        'engine/$VERSION/xr.js'
     ]
     let load = (manual = false) => {
         let script = document.createElement('script')
@@ -68,7 +71,6 @@ TrinityEngine.init = (version, callback) => {
                 if(callback === undefined) {
                     return
                 } else if(Array.isArray(callback)) {
-                    console.log(callback)
                     array = callback
                     index = 0
                     ended = true

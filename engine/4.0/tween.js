@@ -20,7 +20,7 @@ let tweenControls = function() {
     var pos_1    = args.obj[1]
     var pos_2    = args.obj[2]
     var callback = args.fun[0] || function() {}
-    var ease     = args.str[1] || 'power1'
+    var ease     = args.str[1] || 'easeOutSine'
     var offset, time
     var t_0, t_1, p_0, p_1, d, a, b
 
@@ -30,24 +30,28 @@ let tweenControls = function() {
     controls.enabled = false
 
     if(type === 'FIXED') {
-        time   = args.num[0] / 1000
+        time   = args.num[0]
         d = { x : t.x - p.x, y : t.y - p.y, z : t.z - p.z }
         t_0 = { x : t.x, y : t.y, z : t.z }
-        t_1 = { ease : ease, duration : time }
+        t_1 = {}
         Object.keys(pos_1).forEach(function(k) { t_1[k] = pos_1[k] })
 
-        GSAP.timeline({
+        __TE__.Tween({
+            from : t_0,
+            to : t_1,
+            duration : time,
+            ease : ease,
             onComplete : function() {
                 controls.enabled = true
                 controls.update()
                 callback()
             },
-            onUpdate : function() {
+            onUpdate : function(t_0) {
                 controls.object.position.set(t_0.x, t_0.y, t_0.z)
                 controls.target.set(t_0.x + d.x, t_0.y + d.y, t_0.z + d.z)
                 controls.update()
             }
-        }).fromTo(t_0, t_0, t_1)
+        }).start()
     }
 
     if(type === 'LOOSE') {
@@ -108,6 +112,35 @@ let tweenControls = function() {
     
 }
 
+let tweenControlsXR = function() {
+    var args = _args(arguments)
+    var dolly = args.obj[0]
+    var pos_1 = dolly.position
+    var pos_2 = args.obj[1]
+    var back  = args.fun[0] || function() {}
+    var ease  = args.str[1] || 'easeOutSine'
+    var time  = args.num[0] || 1000
+
+    // fill missing directions
+    Object.keys(pos_1).forEach(key => {
+        if(pos_2[key] === undefined) {
+            pos_2[key] = pos_1[key]
+        }
+    })
+
+    __TE__.Tween({
+        from : pos_1,
+        to : pos_2,
+        duration : time,
+        ease : ease,
+        onComplete : back,
+        onUpdate : function(pos) {
+            dolly.position.set(pos.x, pos.y, pos.z)
+        }
+    }).start()
+
+}
+
 tweenControls.captureSpot = function() {
     var args = _args(arguments)
     var controls = args.obj[0]
@@ -136,7 +169,7 @@ let tweenObject = function() {
     var time = args.num[0] || 1000
     var back = args.fun[0] || function() {}
     // prepare
-    var a = {}, b = { ease : ease, duration : time / 1000 }
+    var a = {}, b = {}
     var arr = ['position', 'rotation', 'scale']
     arr.forEach(function(type) {
         // defaults
@@ -150,12 +183,15 @@ let tweenObject = function() {
             if(val[type].z !== undefined) { b[type + 'Z'] = val[type].z }
         }
     })
+
     // tween
-    GSAP.timeline({
-        onComplete : function() {
-            back()
-        },
-        onUpdate : function() {
+    __TE__.Tween({
+        from : a,
+        to : b,
+        duration : time,
+        ease : ease,
+        onComplete : back,
+        onUpdate : function(a) {
             Object.keys(a).forEach(function(key) {
                 if(key === '_GSAP') { return }
                 var type = key.substr(0, key.length - 1)
@@ -164,7 +200,7 @@ let tweenObject = function() {
                 obj[type][axis] = a[key]
             })
         }
-    }).fromTo(a, a, b)
+    }).start()
 }
 
 let tweenMaterial = function() {
@@ -263,6 +299,119 @@ let tweenMaterial = function() {
 
 // ============================================================================
 
+__TE__.Tween = data => {
+    // execeptions
+    if(typeof data.onStart !== 'function') { data.onStart = () => {} }
+    if(typeof data.onUpdate !== 'function') { data.onUpdate = () => {} }
+    if(typeof data.onComplete !== 'function') { data.onComplete = () => {} }
+    // fixed values
+    Object.keys(data.from).forEach(key => {
+        if(data.to[key] === undefined) {
+            data.to[key] = data.from[key]
+        }
+    })
+    // add to queue
+    __TE__.Tween.queue.push(data)
+    // return methods
+    return {
+        start : () => {
+            data.onStart(data.from)
+            data.stamp = Date.now()
+        }
+    }
+}
+
+__TE__.Tween.queue = []
+__TE__.Tween.stamp = Date.now()
+
+__TE__.Tween.render = () => {
+    __TE__.Tween.stamp = Date.now()
+    __TE__.Tween.queue.forEach((data, i) => {
+        // ended
+        if(data === null) { return }
+        // waiting
+        if(data.stamp === undefined) { return }
+        // begin
+        if(data.stamp !== undefined && data.state === undefined) {
+            data.state = animate.clone(data.from)
+        }
+        // animate
+        let present = __TE__.Tween.solve(data)
+        let overflow = false
+        Object.keys(data.from).forEach(key => {
+            let def = (data.to[key] - data.from[key]) * present
+            let old = data.state[key]
+            let crr = data.from[key] + def
+            // overflow fix
+            if(data.from[key] > data.to[key]) {
+                // negative direction : overflow || reverse
+                if(data.state[key] < data.to[key] || old < crr) {
+                    crr = data.to[key]
+                    overflow = true
+                }
+            } else {
+                // positive direction : overflow || reverse
+                if(data.state[key] > data.to[key] || crr < old) {
+                    crr = data.to[key]
+                    overflow = true
+                }
+            }
+            data.state[key] = crr
+        })
+        data.onUpdate(__TE__.Tween.clone(data.state), present)
+        // end
+        if(present >= 1 || overflow) {
+            data.onUpdate(__TE__.Tween.clone(data.to), 1)
+            data.onComplete(__TE__.Tween.clone(data.to), 1)
+            __TE__.Tween.queue[i] = null
+        }
+    })
+}
+
+__TE__.Tween.clone = data => JSON.parse(JSON.stringify(data))
+
+__TE__.Tween.solve = (data) => {
+    let x = (__TE__.Tween.stamp - data.stamp) / data.duration
+    let f = __TE__.Tween.easings[data.ease] || __TE__.Tween.easings['easeOutSine']
+    return f(x)
+}
+
+let pow = (x, y) => Math.pow(x, y)
+let sqrt = x => Math.sqrt(x)
+let sin = x => Math.sin(x)
+let cos = x => Math.cos(x)
+let PI = Math.PI
+
+__TE__.Tween.easings = {
+    'easeInSine' : x => 1 - cos((x * PI) / 2),
+    'easeOutSine' : x => sin((x * PI) / 2),
+    'easeInOutSine' : x => -(cos(PI * x) - 1) / 2,
+    'easeInQuad' : x => x * x,
+    'easeOutQuad' : x => 1 - (1 - x) * (1 - x),
+    'easeInOutQuad' : x => x < 0.5 ? 2 * x * x : 1 - pow(-2 * x + 2, 2) / 2,
+    'easeInCubic' : x => x * x * x,
+    'easeOutCubic' : x => 1 - pow(1 - x, 3),
+    'easeInOutCubic' : x => x < 0.5 ? 4 * x * x * x : 1 - pow(-2 * x + 2, 3) / 2,
+    'easeInQuart' : x => x * x * x * x,
+    'easeOutQuart' : x => 1 - pow(1 - x, 4),
+    'easeInOutQuart' : x => x < 0.5 ? 8 * x * x * x * x : 1 - pow(-2 * x + 2, 4) / 2,
+    'easeInQuint' : x => x * x * x * x * x,
+    'easeOutQuint' : x => 1 - pow(1 - x, 5),
+    'easeInOutQuint' : x => x < 0.5 ? 16 * x * x * x * x * x : 1 - pow(-2 * x + 2, 5) / 2,
+    'easeInExpo' : x => x === 0 ? 0 : pow(2, 10 * x - 10),
+    'easeOutExpo' : x => x === 1 ? 1 : 1 - pow(2, -10 * x),
+    'easeInOutExpo' : x => x === 0 ? 0 : x === 1 ? 1 : x < 0.5 ? pow(2, 20 * x - 10) / 2 : (2 - pow(2, -20 * x + 10)) / 2,
+    'easeInCirc' : x => 1 - sqrt(1 - pow(x, 2)),
+    'easeOutCirc' : x => sqrt(1 - pow(x - 1, 2)),
+    'easeInOutCirc' : x => x < 0.5 ? (1 - sqrt(1 - pow(2 * x, 2))) / 2 : (sqrt(1 - pow(-2 * x + 2, 2)) + 1) / 2,
+    'easeInBack' : x => 2.70158 * x * x * x - 1.70158 * x * x,
+    'easeOutBack' : x => 1 + 2.70158 * pow(x - 1, 3) + 1.70158 * pow(x - 1, 2),
+    'easeInOutBack' : x => x < 0.5 ? (pow(2 * x, 2) * ((2.5949095 + 1) * 2 * x - 2.5949095)) / 2 : (pow(2 * x - 2, 2) * ((2.5949095 + 1) * (x * 2 - 2) + 2.5949095) + 2) / 2
+}
+
+// ============================================================================
+
 TrinityEngine.tweenControls = tweenControls
+TrinityEngine.tweenControlsXR = tweenControlsXR
 TrinityEngine.tweenMaterial = tweenMaterial
 TrinityEngine.tweenObject = tweenObject

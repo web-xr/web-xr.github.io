@@ -45,7 +45,7 @@
 }
 
 .example-item[link="clothing-customizer"] .example-item-button::after {
-    content: 'Select the color and fesign';
+    content: 'Select the color and design';
 }
 
 .example-item[link="diyazen"] .example-item-button::after {

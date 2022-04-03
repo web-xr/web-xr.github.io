@@ -1,6 +1,8 @@
 .slide {
     background-color: #496969;
     color: #FFFE;
+    width: 100vw;
+    overflow: hidden;
 }
 
 .slide-container {

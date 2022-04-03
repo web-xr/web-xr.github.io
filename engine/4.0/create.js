@@ -31,19 +31,12 @@ let createScene = function() {
     controls.enableDamping   = true
     controls.dampingFactor   = 0.1
     renderer.setSize(width, height)
-    TrinityEngine.setupControls('ORBIT', controls,
-        { x : 0, y : 0, z : 5 },
-        { x : 0, y : 0, z : 0 }
+    TrinityEngine.setupControls(
+        'EXACT', controls,
+        { x : 0, y : 1.5, z : 0.0001 },
+        { x : 0, y : 1.5, z : 0 },
+        { maxPolarAngle : 1.8, minPolarAngle : 0.8, enableZoom : false }
     )
-
-    // render
-    if(auto !== false) {
-        function render() {
-            requestAnimationFrame(render)
-            composer.render()
-            controls.update()
-        } render()
-    }
 
     let modules = {
         scene      : scene,
@@ -52,7 +45,21 @@ let createScene = function() {
         controls   : controls,
         composer   : composer,
         renderPass : renderPass,
-        light      :light
+        light      : light,
+        tween      : { render : __TE__.Tween.render },
+        xr         : null
+    }
+
+    modules.xr = __TE__.xr.init(modules)
+
+    // render
+    if(auto !== false) {
+        renderer.setAnimationLoop(() => {
+            composer.render()
+            controls.update()
+            modules.xr.update()
+            modules.tween.render()
+        })
     }
 
     // user events init
