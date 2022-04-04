@@ -121,13 +121,6 @@ let tweenControlsXR = function() {
     var ease  = args.str[1] || 'easeOutSine'
     var time  = args.num[0] || 1000
 
-    // fill missing directions
-    Object.keys(pos_1).forEach(key => {
-        if(pos_2[key] === undefined) {
-            pos_2[key] = pos_1[key]
-        }
-    })
-
     __TE__.Tween({
         from : pos_1,
         to : pos_2,

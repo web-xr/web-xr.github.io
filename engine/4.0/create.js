@@ -50,7 +50,8 @@ let createScene = function() {
         xr         : null
     }
 
-    modules.xr = __TE__.xr.init(modules)
+    TrinityEngine._glob.modules = modules
+    modules.xr = TrinityEngine.xr.init()
 
     // render
     if(auto !== false) {

@@ -1,68 +1,60 @@
 let TrinityEngine = {}
 let __TE__ = {}
 
-TrinityEngine.init = (version, callback) => {
+TrinityEngine.init = (root, callback) => {
+    TrinityEngine._glob = {
+        root : root,
+        xr : { profile : { layouts : {} } }
+    }
     delete TrinityEngine.init
     let index = 0
     let ended = false
     let array = [
         // three
-        'engine/source/three/THREE.js',
+        '../source/three/THREE.js',
         // loaders
-        'engine/source/three/loaders/GLTFLoader.js',
-        'engine/source/three/loaders/FBXLoader.js',
-        'engine/source/three/libs/fflate.min.js',
-        'engine/source/three/loaders/OBJLoader.js',
-        'engine/source/three/loaders/MTLLoader.js',
-        'engine/source/three/loaders/DDSLoader.js',
-        'engine/source/three/loaders/PLYLoader.js',
+        '../source/three/loaders/GLTFLoader.js',
+        '../source/three/loaders/FBXLoader.js',
+        '../source/three/libs/fflate.min.js',
+        '../source/three/loaders/OBJLoader.js',
+        '../source/three/loaders/MTLLoader.js',
+        '../source/three/loaders/DDSLoader.js',
+        '../source/three/loaders/PLYLoader.js',
         // shaders
-        'engine/source/three/shaders/CopyShader.js',
-        'engine/source/three/shaders/SSRShader.js',
-        'engine/source/three/shaders/SSAOShader.js',
-        'engine/source/three/shaders/LuminosityHighPassShader.js',
+        '../source/three/shaders/CopyShader.js',
+        '../source/three/shaders/SSRShader.js',
+        '../source/three/shaders/SSAOShader.js',
+        '../source/three/shaders/LuminosityHighPassShader.js',
         // controls
-        'engine/source/three/controls/OrbitControls.js',
+        '../source/three/controls/OrbitControls.js',
         // postprocessing
-        'engine/source/three/postprocessing/EffectComposer.js',
-        'engine/source/three/postprocessing/RenderPass.js',
-        'engine/source/three/postprocessing/OutlinePass.js',
-        'engine/source/three/postprocessing/ShaderPass.js',
-        'engine/source/three/postprocessing/SSRPass.js',
-        'engine/source/three/postprocessing/SSAOPass.js',
-        'engine/source/three/math/SimplexNoise.js',
-        'engine/source/three/postprocessing/UnrealBloomPass.js',
+        '../source/three/postprocessing/EffectComposer.js',
+        '../source/three/postprocessing/RenderPass.js',
+        '../source/three/postprocessing/OutlinePass.js',
+        '../source/three/postprocessing/ShaderPass.js',
+        '../source/three/postprocessing/SSRPass.js',
+        '../source/three/postprocessing/SSAOPass.js',
+        '../source/three/math/SimplexNoise.js',
+        '../source/three/postprocessing/UnrealBloomPass.js',
         // webxr
-        'engine/source/three/webxr/VRButton.js',
-        'engine/source/three/webxr/XRControllerModelFactory.js',
-        'engine/source/three/libs/motion-controllers.module.js',
+        '../source/three/webxr/VRButton.js',
+        '../source/three/webxr/XRControllerModelFactory.js',
+        '../source/three/libs/motion-controllers.module.js',
         // gsap
-        'engine/source/gsap/gsap.js',
+        '../source/gsap/gsap.js',
         // trinity engine
-        'engine/import.js',
-        'engine/$VERSION/check.js',
-        'engine/$VERSION/create.js',
-        'engine/$VERSION/find.js',
-        'engine/$VERSION/load.js',
-        'engine/$VERSION/setup.js',
-        'engine/$VERSION/tween.js',
-        'engine/$VERSION/xr.js'
+        '../import.js',
+        'check.js',
+        'create.js',
+        'find.js',
+        'load.js',
+        'setup.js',
+        'tween.js',
+        'xr.js'
     ]
     let load = (manual = false) => {
         let script = document.createElement('script')
-        
-        let domain = location.toString()
-        let source = array[index]
-
-        if(manual) {
-            source = domain + source
-        } else {
-            if(domain.indexOf('/staging/') > -1 || domain.indexOf('/examples/') > -1) {
-                source = '../../' + source
-            } else { source = './' + source }
-        }
-
-        script.src = source.replace('$VERSION', version)
+        script.src = (manual ? location.toString() : root) + array[index]
         document.head.appendChild(script)
 
         script.onload = () => {

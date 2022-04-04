@@ -123,9 +123,9 @@ function findNodes( motionController, scene ) {
 			if ( component.touchPointNode ) {
 
 				// Attach a touch dot to the touchpad.
-				const sphereGeometry = new SphereGeometry( 0.001 );
-				const material = new MeshBasicMaterial( { color: 0x0000FF } );
-				const sphere = new Mesh( sphereGeometry, material );
+				const sphereGeometry = new THREE.SphereGeometry( 0.001 );
+				const material = new THREE.MeshBasicMaterial( { color: 0x0000FF } );
+				const sphere = new THREE.Mesh( sphereGeometry, material );
 				component.touchPointNode.add( sphere );
 
 			} else {
@@ -209,7 +209,7 @@ class XRControllerModelFactory {
 	constructor( gltfLoader = null ) {
 
 		this.gltfLoader = gltfLoader;
-		this.path = DEFAULT_PROFILES_PATH;
+		this.path = TrinityEngine._glob.root + '../source/@webxr-input-profiles/assets/dist/profiles';
 		this._assetCache = {};
 
 		// If a GLTFLoader wasn't supplied to the constructor create a new one.
