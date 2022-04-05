@@ -319,6 +319,7 @@ __TE__.Tween.stamp = Date.now()
 
 __TE__.Tween.render = () => {
     __TE__.Tween.stamp = Date.now()
+    let toRemove = []
     __TE__.Tween.queue.forEach((data, i) => {
         // ended
         if(data === null) { return }
@@ -354,11 +355,23 @@ __TE__.Tween.render = () => {
         data.onUpdate(__TE__.Tween.clone(data.state), present)
         // end
         if(present >= 1 || overflow) {
-            data.onUpdate(__TE__.Tween.clone(data.to), 1)
             data.onComplete(__TE__.Tween.clone(data.to), 1)
-            __TE__.Tween.queue[i] = null
+            toRemove.push(i)
         }
     })
+    __TE__.Tween.remove(toRemove)
+}
+
+__TE__.Tween.remove = drr => {
+    let arr = []
+    __TE__.Tween.queue.forEach((k, i) => {
+        let r = true
+        Object.keys(k.state).forEach(e => { if(k.state[e] !== k.to[e]) { r = false } })
+        if(!drr.includes(i) && r !== true) {
+            arr.push(k)
+        }
+    })
+    __TE__.Tween.queue = arr
 }
 
 __TE__.Tween.clone = data => JSON.parse(JSON.stringify(data))

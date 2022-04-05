@@ -12,11 +12,10 @@ let loadAll = function() {
     Object.keys(files).forEach(function(key) {
         var type = loadAll.getFileType(files[key])
         files[key] = { wait : true, path : files[key].split('#')[0] }
-        files[key].type = 'load' + type[0] + type.substr(1).toLowerCase()
+        files[key].type = 'load' + type[0] + type.substring(1).toLowerCase()
         files[key].extn = type
         loaddata[files[key].path] = 0
     })
-
     // manager callback
     loadAll.manager.onProgress = function(u, n) {
         loaddata.mngr = n
@@ -69,9 +68,11 @@ loadAll.getFileType = function(url) {
         var e_1 = ['glb', 'gltf', 'fbx', 'obj', 'ply']
         var e_2 = ['jpg', 'jpeg', 'png', 'gif', 'bmp']
         var e_3 = ['ogg', 'mp3', 'wav']
+        var e_4 = ['mp4', 'avi', 'mpg', '3gp']
         if(e_1.indexOf(ext) > -1) { type = 'MODEL' }
         if(e_2.indexOf(ext) > -1) { type = 'TEXTURE' }
         if(e_3.indexOf(ext) > -1) { type = 'AUDIO' }
+        if(e_4.indexOf(ext) > -1) { type = 'VIDEO' }
     }
     return type
 }
@@ -207,6 +208,27 @@ let loadAudio = function() {
     })
 }
 
+let loadVideo = function() {
+    var args = _args(arguments)
+    var file     = args.str[0]
+    var autoplay = args.boo[0] || false
+    var callback = args.fun[0] || function() {}
+
+    let video = document.createElement('video')
+    video.addEventListener('loadstart', () => {
+        callback(new THREE.VideoTexture(video))
+    })
+    video.style.display = 'none'
+    video.load = true
+    video.muted = true
+    video.src = file
+    if(autoplay) {
+        video.autoplay = autoplay
+        video.play()
+    }
+    document.documentElement.appendChild(video)
+}
+
 // ============================================================================
 
 TrinityEngine.loadAll = loadAll
@@ -216,3 +238,4 @@ TrinityEngine.loadBitmap = loadBitmap
 TrinityEngine.loadModel = loadModel
 TrinityEngine.loadTexture = loadTexture
 TrinityEngine.loadAudio = loadAudio
+TrinityEngine.loadVideo = loadVideo

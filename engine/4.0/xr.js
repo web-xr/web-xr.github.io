@@ -148,6 +148,7 @@ let checkXREventListeners = (source, profile) => {
     let hand = source.handedness
     let struct = profile.layouts[hand].components
     let listenGroups = modules.xr.listeners
+    let history = checkXREventListeners.history
     // init history handedness
     if(history[hand] === undefined) { history[hand] = {} }
 
@@ -212,6 +213,7 @@ let checkXREventListeners = (source, profile) => {
             if(listener.type === 'device') { call(listener, hand, now) }
             if(old) {
                 if(listener.type === 'button') {
+                    if(now.pressed) { activeXRHand = hand }
                     if(listener.touch) {
                         if(!old.touched && now.touched && listener.mode === 'start') {
                             call(listener, hand, now)
@@ -230,19 +232,31 @@ let checkXREventListeners = (source, profile) => {
                         }
                     }
                 } else if(listener.type === 'x-axis') {
-                    if(now['x-axis'] !== 0) { call(listener, hand, now) }
+                    if(now['x-axis'] !== 0) {
+                        activeXRHand = hand
+                        call(listener, hand, now)
+                    }
                 } else if(listener.type === 'y-axis') {
-                    if(now['y-axis'] !== 0) { call(listener, hand, now) }
+                    if(now['y-axis'] !== 0) {
+                        activeXRHand = hand
+                        call(listener, hand, now)
+                    }
                 }
             }
         })
     })
+
+    if(activeXRHand === 'right') {
+        TrinityEngine._glob.modules.boombox.rotation.z = 0
+    } else {
+        TrinityEngine._glob.modules.boombox.rotation.z = 0
+    }
+
     // store record in history
     history[hand] = JSON.parse(JSON.stringify(record))
 }
 
 checkXREventListeners.history = {}
-
 
 checkXREventListeners.checkCollide = (listener, controllerIndex) => {
     let modules = TrinityEngine._glob.modules
@@ -256,49 +270,41 @@ checkXREventListeners.checkCollide = (listener, controllerIndex) => {
     return arr[0]
 }
 
+
+let activeXRHand = 'right'
+
 checkXREventListeners.callback = (listener, hand, data = {}) => {
     let modules = TrinityEngine._glob.modules
 
     if(listener.object) {
-        let collide_r = checkXREventListeners.checkCollide(listener, 0)
-        let collide_l = checkXREventListeners.checkCollide(listener, 1)
-
+        let collide = null
         let old = listener.collide
-        let now = true
+        let now = null
 
-        if(listener.handedness === 'right' && collide_r) {
-            if(!old && listener.mode === 'start') {
-                listener.callback(collide_r)
-            } else if(old && listener.mode === 'ongoing') {
-                listener.callback(collide_r)
-            }
-        } else if(listener.handedness === 'left' && collide_l) {
-            if(!old && listener.mode === 'start') {
-                listener.callback(collide_l)
-            } else if(old && listener.mode === 'ongoing') {
-                listener.callback(collide_l)
-            }
-        } else if(listener.handedness === 'any' && hand === 'right' && collide_r) {
-            if(!old && listener.mode === 'start') {
-                listener.callback(collide_r)
-            } else if(old && listener.mode === 'ongoing') {
-                listener.callback(collide_r)
-            }
-        } else if(listener.handedness === 'any' && hand === 'left' && collide_l) {
-            if(!old && listener.mode === 'start') {
-                listener.callback(collide_l)
-            } else if(old && listener.mode === 'ongoing') {
-                listener.callback(collide_l)
-            }
-        } else {
-            now = false
-            if(old && !now && listener.mode === 'end') {
-                listener.callback(data)
+        if(activeXRHand === hand && listener.component === 'xr-collide') {
+            let k = hand === 'right' ? 0 : 1
+            collide = checkXREventListeners.checkCollide(listener, k)
+            now = collide !== undefined
+            if(listener.handedness === 'any' || listener.handedness === hand) {
+                if(!old && now && listener.mode === 'start') {
+                    listener.callback(collide)
+                } else if(old && now && listener.mode === 'ongoing') {
+                    listener.callback(collide)
+                } else if(old && !now && listener.mode === 'end') {
+                    listener.callback(collide)
+                }
+                listener.collide = now
             }
         }
-        listener.collide = now
+
+        if(activeXRHand === hand && listener.component !== 'xr-collide') {
+            let k = hand === 'right' ? 0 : 1
+            collide = checkXREventListeners.checkCollide(listener, k)
+            if(collide !== undefined) { listener.callback(collide) }
+        }
+
     } else {
-        if(listener.handedness === hand ||listener.handedness === 'any')
+        if(listener.handedness === hand || listener.handedness === 'any')
         listener.callback(data)
     }
 

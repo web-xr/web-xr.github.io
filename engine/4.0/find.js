@@ -67,19 +67,17 @@ let findByMaterialName = function() {
     var mult  = args.boo[0]
 
     var out = []
-    function recMesh(obj) {
-        if(obj.material !== undefined) {
-            if(obj.material.name === name) {
-                out.push(obj)
+    model.traverse(function(child) {
+        if(child.isMesh && child.material) {
+            if(Array.isArray(child.material)) {
+                child.material.forEach(k => {
+                    if(k.name === name) { out.push(k) }
+                })
+            } else  {
+                if(child.material.name === name) { out.push(child.material) }
             }
         }
-        if(obj.children !== undefined) {
-            obj.children.forEach(child => {
-                recMesh(child)
-            })
-        }
-    }
-    recMesh(model)
+    })
 
     if(mult) { return out }
     else { return out[0] }
