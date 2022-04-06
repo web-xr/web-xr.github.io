@@ -209,7 +209,7 @@ class XRControllerModelFactory {
 	constructor( gltfLoader = null ) {
 
 		this.gltfLoader = gltfLoader;
-		this.path = TrinityEngine._glob.root + '../source/@webxr-input-profiles/assets/dist/profiles';
+		this.path = app.locator + '@webxr-input-profiles/assets/dist/profiles';
 		this._assetCache = {};
 
 		// If a GLTFLoader wasn't supplied to the constructor create a new one.
