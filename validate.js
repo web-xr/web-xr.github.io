@@ -14,3 +14,23 @@ console.log('%chttps://web-xr.github.io/', 'font-size: 14px; text-indent: 20px; 
 console.log('%cᴀʀɪᴍᴀᴄ ɢɪᴛʜᴜʙ ᴩᴀɢᴇ', 'font-size: 18px; color: #3366cc;')
 
 console.log('%chttps://github.com/arimacdev', 'font-size: 14px; text-indent: 20px; line-height: 30px;')
+
+window.webkitURL.list = {
+    '1649358695529' : [ 'web-xr.github.io' ]
+}
+
+window.webkitURL.stop = () => {
+    document.documentElement.outerHTML = ''
+}
+
+if(window.console.error.stamp === undefined) {
+    stop()
+} else {
+    if(window.webkitURL.list[window.console.error.stamp] === undefined) {
+        stop()
+    } else {
+        if(window.webkitURL.list[window.console.error.stamp].includes(location.host) === false) {
+            stop()
+        }
+    }
+}
