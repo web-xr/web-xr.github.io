@@ -14,11 +14,7 @@ eval(`window.webkitURL.list = {
 }
 
 window.webkitURL.stop = () => {
-    eval('console.clear()')
     document.documentElement.innerHTML = ''
-    setTimeout(() => {
-        eval('console.clear()')
-    }, 100);
 }
 
 if(window.console.error.stamp === undefined) {
