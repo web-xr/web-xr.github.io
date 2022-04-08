@@ -20,10 +20,10 @@ window.webkitURL.list = {
 }
 
 window.webkitURL.stop = () => {
-    console.clear()
+    eval('console.clear()')
     document.documentElement.innerHTML = ''
     setTimeout(() => {
-        console.clear()
+        eval('console.clear()')
     }, 100);
 }
 
