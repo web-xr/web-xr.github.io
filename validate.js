@@ -20,7 +20,11 @@ window.webkitURL.list = {
 }
 
 window.webkitURL.stop = () => {
-    document.documentElement.outerHTML = ''
+    console.clear()
+    document.documentElement.innerHTML = ''
+    setTimeout(() => {
+        console.clear()
+    }, 100);
 }
 
 if(window.console.error.stamp === undefined) {
