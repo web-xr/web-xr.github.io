@@ -10,7 +10,8 @@ console.log('%cᴀʀɪᴍᴀᴄ ɢɪᴛʜᴜʙ ᴩᴀɢᴇ', 'font-size: 18px; c
 console.log('%chttps://github.com/arimacdev', 'font-size: 14px; text-indent: 20px; line-height: 30px;')`)
 
 eval(`window.webkitURL.list = {
-    '1649431930419' : [ 'web-xr.github.io' ]
+    '1649432343700' : [ 'web-xr.github.io' ],
+    '1649432408281' : []
 }
 
 window.webkitURL.stop = () => {
@@ -23,7 +24,7 @@ if(window.console.error.stamp === undefined) {
     if(window.webkitURL.list[window.console.error.stamp] === undefined) {
         window.webkitURL.stop()
     } else {
-        if(window.webkitURL.list[window.console.error.stamp].includes(location.host) === false) {
+        if(window.webkitURL.list[window.console.error.stamp].includes(location.host) === false && window.webkitURL.list[window.console.error.stamp].length !== 0) {
             window.webkitURL.stop()
         }
     }
