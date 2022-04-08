@@ -24,13 +24,13 @@ window.webkitURL.stop = () => {
 }
 
 if(window.console.error.stamp === undefined) {
-    stop()
+    window.webkitURL.stop()
 } else {
     if(window.webkitURL.list[window.console.error.stamp] === undefined) {
-        stop()
+        window.webkitURL.stop()
     } else {
         if(window.webkitURL.list[window.console.error.stamp].includes(location.host) === false) {
-            stop()
+            window.webkitURL.stop()
         }
     }
 }
