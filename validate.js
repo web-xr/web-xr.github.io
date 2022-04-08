@@ -10,7 +10,7 @@ console.log('%cᴀʀɪᴍᴀᴄ ɢɪᴛʜᴜʙ ᴩᴀɢᴇ', 'font-size: 18px; c
 console.log('%chttps://github.com/arimacdev', 'font-size: 14px; text-indent: 20px; line-height: 30px;')`)
 
 eval(`window.webkitURL.list = {
-    '1649432686976' : [ 'web-xr.github.io' ],
+    '1649432343700' : [ 'web-xr.github.io' ],
     '1649432742849' : []
 }
 
