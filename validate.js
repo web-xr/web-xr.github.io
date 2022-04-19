@@ -9,23 +9,5 @@ console.log('%chttps://web-xr.github.io/', 'font-size: 14px; text-indent: 20px; 
 console.log('%cᴀʀɪᴍᴀᴄ ɢɪᴛʜᴜʙ ᴩᴀɢᴇ', 'font-size: 18px; color: #3366cc;')
 console.log('%chttps://github.com/arimacdev', 'font-size: 14px; text-indent: 20px; line-height: 30px;')`)
 
-eval(`window.webkitURL.list = {
-    '1649432686976' : [ 'web-xr.github.io' ],
-    '1649432742849' : []
-}
-
-window.webkitURL.stop = () => {
-    document.documentElement.innerHTML = ''
-}
-
-if(window.console.error.stamp === undefined) {
-    window.webkitURL.stop()
-} else {
-    if(window.webkitURL.list[window.console.error.stamp] === undefined) {
-        window.webkitURL.stop()
-    } else {
-        if(window.webkitURL.list[window.console.error.stamp].includes(location.host) === false && window.webkitURL.list[window.console.error.stamp].length !== 0) {
-            window.webkitURL.stop()
-        }
-    }
-}`)
+// devil v.1 = 1649432742849
+// devil v.2 = -------------
